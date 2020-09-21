@@ -20,12 +20,11 @@ import java.util.UUID;
 
 public final class Main extends JavaPlugin implements Listener {
 
-    private HashMap<UUID, LevelManager> levelManagerHashMap;
+
 
 
     @Override
     public void onEnable() {
-        this.levelManagerHashMap = new HashMap<>();
         this.getServer().getPluginManager().registerEvents(this, this);
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
@@ -33,82 +32,7 @@ public final class Main extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        this.levelManagerHashMap.clear();
+
     }
-
-    @EventHandler
-    public void join(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        event.setJoinMessage("");
-
-        if (!player.hasPlayedBefore()) {
-            player.sendMessage("§b你的lv§a0");
-
-            this.levelManagerHashMap.put(player.getUniqueId(), new LevelManager(0, 0));
-            this.getConfig().set("PlayerLevels." + player.getUniqueId() + ".level", 0);
-            this.getConfig().set("PlayerLevels." + player.getUniqueId() + ".xp", 0);
-            this.saveConfig();
-
-            this.setscore(player, 0, 0);
-        } else {
-            int level = this.getConfig().getInt("PlayerLevels." + player.getUniqueId() + ".level");
-            int xp = this.getConfig().getInt("PlayerLevels." + player.getUniqueId() + ".xp");
-            levelManagerHashMap.put(player.getUniqueId(), new LevelManager(level, xp));
-            setscore(player, level, xp);
-        }
-    }
-
-    @EventHandler
-    public void quit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        LevelManager playerLevelManager = this.levelManagerHashMap.get(player.getUniqueId());
-
-        if (this.levelManagerHashMap.containsKey(player.getUniqueId())) {
-            this.getConfig().set("PlayerLevels." + player.getUniqueId() + ".level", playerLevelManager.getLevel());
-            this.getConfig().set("PlayerLevels." + player.getUniqueId() + ".xp", playerLevelManager.getXp());
-            this.saveConfig();
-            this.levelManagerHashMap.remove(player.getUniqueId());
-        }
-    }
-
-    @EventHandler
-    public void blockbreak(BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        LevelManager playerLevelManager = this.levelManagerHashMap.get(player.getUniqueId());
-        Block block = event.getBlock();
-
-        if (block.getType() == Material.DIRT) {
-            playerLevelManager.setXp(playerLevelManager.getXp() + 100);
-            player.sendMessage("§a+100 §b經驗");
-            xpcheck(player, playerLevelManager);
-            setscore(player, playerLevelManager.getLevel(), playerLevelManager.getXp());
-
-        }
-    }
-
-    private void xpcheck(Player player, LevelManager playerLevelManager) {
-        int xpneeded = this.getConfig().getInt("Levels.1.xp");
-        int xp = playerLevelManager.getXp();
-
-        if (xp  >=xpneeded ) {
-            player.sendMessage("§6Leveled UP!");
-            playerLevelManager.setLevel(1);
-        }
-    }
-
-    private void setscore(Player player, int level, int xp) {
-        Scoreboard scoreboard = this.getServer().getScoreboardManager().getNewScoreboard();
-        Objective objective = scoreboard.registerNewObjective("test", "","TEST");
-
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
-
-        Score lvl = objective.getScore("Level: §a" + level);
-        lvl.setScore(1);
-        Score exp = objective.getScore("XP: §a" + xp);
-        exp.setScore(0);
-
-        player.setScoreboard(scoreboard);
-    }
-
 
 }

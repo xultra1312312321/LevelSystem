@@ -1,28 +1,45 @@
 package me.iloveeatmuffin.levelsystem.Manager;
 
+
+
+import java.util.HashMap;
+import java.util.UUID;
+
 public class LevelManager {
-    private int level;
-    private int xp;
+ //addLevel
+//addExp
+//reduceExp
+//reduceLevel
 
-    public LevelManager(int level, int xp) {
-        this.level = level;
-        this.xp = xp;
+    private HashMap<UUID, LevelManager> levelManagerHashMap;
+    private int getPlayerLevel;
+    private double addPlayerExp;
+    private double reducePlayerExp;
+    private double addPlayerLevel;
+    private double reducePlayerLevel;
+
+    public LevelManager(int getPlayerLevel, double addPlayerExp, double reducePlayerExp,double addPlayerLevel, double reducePlayerLevel) {
+        this.getPlayerLevel = getPlayerLevel;
+        this.addPlayerExp = addPlayerExp;
+        this.reducePlayerExp = reducePlayerExp;
+        this.addPlayerLevel = addPlayerLevel;
+        this.reducePlayerLevel = reducePlayerLevel;
     }
 
-    public int getLevel() {
-        return level;
+    public static int getPlayerLevel(UUID uuid) {
+    }
+    public double AddPlayerExp(UUID uuid, int amount) {
     }
 
-    public void setLevel(int level) {
-        this.level = level;
+    public double AddPlayerLevel(UUID uuid, int amount) {
     }
 
-    public int getXp() {
-        return xp;
+    public double ReducePlayerExp(UUID uuid, int amount) {
+        return AddPlayerExp(uuid, amount * -1);
     }
-
-    public void setXp(int xp) {
-        this.xp = xp;
+    public double ReducePlayerLevel(UUID uuid, int amount) {
+        return AddPlayerLevel(uuid, amount * -1);
     }
 }
+
 
