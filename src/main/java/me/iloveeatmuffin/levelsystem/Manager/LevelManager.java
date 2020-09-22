@@ -1,45 +1,22 @@
 package me.iloveeatmuffin.levelsystem.Manager;
 
 
+import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-import java.util.UUID;
+public class LevelManager{
+    public static double expRequiredToLevelUp(double currentLevel){
+        double exponent = 500;
+        if(currentLevel == 1){
+            return exponent;
+        }
+        return  exponent * (Math.pow(currentLevel,2)) - (exponent * currentLevel);
+    }
+    public static void LevelUp(Player player, int level){
+        //levelup 的message
 
-public class LevelManager {
- //addLevel
-//addExp
-//reduceExp
-//reduceLevel
-
-    private HashMap<UUID, LevelManager> levelManagerHashMap;
-    private int getPlayerLevel;
-    private double addPlayerExp;
-    private double reducePlayerExp;
-    private double addPlayerLevel;
-    private double reducePlayerLevel;
-
-    public LevelManager(int getPlayerLevel, double addPlayerExp, double reducePlayerExp,double addPlayerLevel, double reducePlayerLevel) {
-        this.getPlayerLevel = getPlayerLevel;
-        this.addPlayerExp = addPlayerExp;
-        this.reducePlayerExp = reducePlayerExp;
-        this.addPlayerLevel = addPlayerLevel;
-        this.reducePlayerLevel = reducePlayerLevel;
+        //levelup 的聲音
+        player.getLocation().getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1,1);
     }
 
-    public static int getPlayerLevel(UUID uuid) {
-    }
-    public double AddPlayerExp(UUID uuid, int amount) {
-    }
-
-    public double AddPlayerLevel(UUID uuid, int amount) {
-    }
-
-    public double ReducePlayerExp(UUID uuid, int amount) {
-        return AddPlayerExp(uuid, amount * -1);
-    }
-    public double ReducePlayerLevel(UUID uuid, int amount) {
-        return AddPlayerLevel(uuid, amount * -1);
-    }
 }
-
-
